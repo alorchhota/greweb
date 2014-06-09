@@ -1,0 +1,412 @@
+<html>
+<head>
+    <title>GFill : GRE Fill In The Gaps</title>
+    <script type="text/javascript" language="javascript">
+        var totalQuestion = null;
+        var currentQuestionNo = null;
+		var hintPercentage = null;
+        var score = null;
+        var answeredCorrectly = null;
+		
+        var currentCorrectAnswer = null;
+		
+        
+        var questionContainerElement = null;
+        var resultContainerElement = null;
+		
+        var questionElement = null;
+		var hintElement = null;
+        var answerElement = null;
+		var prevAnswerElement = null;
+		var resultTextElement = null;
+				
+        
+		var selectedQuestionIndexes = null;
+		
+        var questions = [
+			["canonical", "established", "authorized", "recognized"],
+			["judicious", "characterized by good judgement", "prudent"],
+			["canon", "rule of law and principles", "a standard"],
+			["clairvoyant", "a person who claims to see the future"],
+			["venial", "able to be forgiven", "excusable"],
+			["certitude", "certainty", "freedom from doubt"],
+			["evoke", "to call up", "cause to appear"],
+			["inexorable", "unyielding", "unalterable"],
+			["overt", "open to view or knowledge"],
+			["avert", "to turn away aside"],
+			["juxtapose", "to place close together"],
+			["mellow", "soft and rich"],
+			["repudiate", "reject"],
+			["smug", "confident of one's ability"],
+			["bask", "to lie in", "to enjoy"],
+			["vignette", "decorated design on the title page", "small sketch"],
+			["pastiche", "work compiled from various sources"],
+			["cameo", "small portrait"],
+			["reconnaissance", "inspection", "exploration"],
+			["preordained", "fated"],
+			["opulent", "rich"],
+			["libertine", "free-thinker"],
+			["accolade", "any award or honor"],
+			["moribund", "dying", "near death"],
+			["debunk", "throw out a wrong idea"],
+			["trudge", "walk as though tired"],
+			["mander", "wander"],
+			["amble", "walk aimlessly"],
+			["rage", "violent anger", "angry"],
+			["fettered", "restricted"],
+			["teeming", "abounding with something", "prolific or fertile"],
+			["tout", "advertise"],
+			["herald", "announce"],
+			["languish", "weaken", "fade"],
+			["abiding", "lasting"],
+			["pervasive", "spreaded throughout"],
+			["arcane", "known only to a few", "esoteric"],
+			["fickle", "changable"],
+			["stalwart", "brave and loyal"],
+			["docile", "easily managed"],
+			["servile", "overly submissive"],
+			["rococo", "highly elaborate"],
+			["barb", "insult"],
+			["lampoon", "mock", "deride"],
+			["lenient", "tolerant"],
+			["commute", "to change to a less severe one"],
+			["germane", "relevant"],
+			["pertinent", "relevant"],
+			["misogynistic", "hatred for women"],
+			["puritanical", "very strict in moral"],
+			["covert", "covered", "secret", "disguised"],
+			["prudish", "excessively proper"],
+			["confrontation", "open conflict"],
+			["mordant", "caustic"],
+			["preoccupation", "concern", "care", "worry", "solicitude"],
+			["petty", "of little importance", "trivial"],
+			["untoward", "unexpected", "inappropriate"],
+			["inured", "habituated", "accustomed"],
+			["hardened", "to become hard", "to become habituated"],
+			["melancholy", "sad"],
+			["lugubrious", "mournful"],
+			["jaunty", "having a lively, cheerful, self-confident manner"],
+			["jocose", "humorous"],
+			["frivolous", "not serious"],
+			["impasse", "deadlock"],
+			["coalesce", "combine"],
+			["tardy", "slow", "late", "sluggish"],
+			["hidebound", "narrow-minded"],
+			["inane", "stupid", "senseless"],
+			["pertinacity", "persistent determination"],
+			["adroit", "skilful"],
+			["dexterous", "skilful"],
+			["deft", "skilful"],
+			["secretarian", "denoting a sect"],
+			["frantic", "wild or distraught with fear, anxiety and other emotions"],
+			["distraught", "deeply upset"],
+			["dogged", "determined", "unyielding"],
+			["censure", "strong criticism"],
+			["upbraid", "scold"],
+			["chide", "scold"],
+			["eschew", "abstain from"],
+			["shun", "abstain from"],
+			["epitomize", "be a perfect example", "give a summary"],
+			["accentuate", "make more noticeable"],
+			["egregious", "outstandingly obvious"],
+			["pretentious", "attempting to pretend", "showy", "pompous"],
+			["subliminal", "below the threshold of consciousness"],
+			["hypochondriac", "person with imagining illness"],
+			["malcontent", "dissatisfied person"],
+			["quack", "a fraud physician"],
+			["charlatan", "a fraud"],
+			["denigrate", "criticize unfairly", "disparage"],
+			["decry", "public denounce", "criticism"],
+			["temerity", "audacious"],
+			["predilection", "a preference for something"],
+			["amity", "friendly relationship"],
+			["glib", "fluent", "smooth talking"],
+			["callous", "deliberately unfeeling"],
+			["saturnine", "slow and gloomy"],
+			["commendation", "praise"],
+			["jubilation", "a feeling of happiness"],
+			["incredulity", "state of being unbelieved"],
+			["incessant", "continuous", "uninterrupted"],
+			["xenophobia", "fear of foreigners"],
+			["punctilious", "meticulous", "worrying about details"],
+			["pander", "satisfy", "comply with"],
+			["gratify", "give pleasure or satisfaction"],
+			["indulge", "satisfy", "yield to desire"],
+			["sycophantic", "over-submissive"],
+			["lackluster", "lacking inspiration"],
+			["nepotism", "favoring relatives"],
+			["slander", "making false statement to dishonor other"],
+			["prodigy", "genius"],
+			["pariah", "an outcast"],
+			["tyro", "novice", "beginner"],
+			["vindicate", "clear from blame"],
+			["procastinate", "postpone", "delay"],
+			["reprieve", "cancer or postpone punishment"],
+			["cognizance", "awareness"],
+			["refulgent", "shining brightly"],
+			["sequestration", "the action of taking forcible posession of something"],
+			["debilitate", "weaken"],
+			["deracinate", "tear up by the roots"],
+			["stenorian", "loud and powerful in voice"],
+			["beligerence", "aggressive"],
+			["resurgent", "increasing", "reviving", "renascent", "restoring"],
+			["rodent", "animal like rat or mouse"],
+			["denizen", "an inhibitant"],
+			["propitious", "favorable"],
+			["hedonistic", "pleasure seeking"],
+			["decimation", "destruction"]			
+
+
+
+        ];
+        
+        function init()
+        {
+			setTopBlankSpace();
+			initializeAll();
+            getHtmlElements();
+            selectRandomQuestions();
+            startExam();
+        }
+		
+		function setTopBlankSpace(){
+			var isiPad = navigator.userAgent.match(/iPad/i) != null;
+			if(isiPad){
+				var topBlankElement = document.getElementById("topBlank");
+				topBlankElement.innerHTML = "<h><br/></h>"
+			}
+		}
+		
+		function initializeAll(){
+			totalQuestion = 10;
+			currentQuestionNo = 1;
+			hintPercentage = 50;
+			score = 0;
+			answeredCorrectly = new Array();
+			
+			currentCorrectAnswer = null;
+			
+			questionContainerElement = null;
+			resultContainerElement = null;
+			
+			questionElement = null;
+			answerElement = null;
+			prevAnswerElement = null;
+			
+			selectedQuestionIndexes = null;
+		}
+        
+        function getHtmlElements()
+        {
+            questionContainerElement = document.getElementById("QuestionContainer");
+            resultContainerElement = document.getElementById("ResultContainer");
+            
+			questionContainerElement.style.display = "block";
+            resultContainerElement.style.display = "none";
+        
+            questionElement = document.getElementById("Question");
+			hintElement = document.getElementById("Hint");
+			answerElement = document.getElementById("Answer");
+			prevAnswerElement = document.getElementById("PrevAnswer");
+			prevAnswerElement.innerHTML = "";
+            
+            resultTextElement = document.getElementById("ResultText");
+        }
+        
+        function startExam()
+        {
+            currentQuestionNo = 0;
+            next();
+        }
+        
+        function loadQuestion(quesIndex)
+        {
+            // show the question
+			var q = questions[quesIndex]
+			var optionQuestionIndex = getRandomQuestionIndexes(1, q.length-2)[0] + 1; // exclude the first word
+			questionElement.innerHTML = questions[quesIndex][optionQuestionIndex];
+			
+			// set current answer
+            currentCorrectAnswer = q[0].toUpperCase();
+			answerElement.value = ""
+			
+			// set hint
+			var noOfHint = Math.round(currentCorrectAnswer.length * hintPercentage / 100);
+			var hintIndexes = getRandomQuestionIndexes(noOfHint, currentCorrectAnswer.length-1);
+			
+			var hint = ""
+			for(var i=0; i<currentCorrectAnswer.length; i++)
+			{
+				hint = hint + "_";
+			}
+			
+			for(var i=0; i<hintIndexes.length; i++)
+			{
+				hint = hint.replaceAt( hintIndexes[i], currentCorrectAnswer[hintIndexes[i]]);
+			}
+			
+			hint = hint.replace(/_/g, ' _');
+			
+			
+			
+			hintElement.innerHTML = hint;
+			
+				
+			
+        }
+        
+        function selectMeaningFromQuestion(questionIndex)
+        {
+            var question = questions[questionIndex];
+            var meaningIndex = getRandomInteger(question.length - 2) + 1; // -1 for 0 based index, -1 for avoiding first GRE word
+            return question[meaningIndex];
+        }
+        
+        function next()
+        {
+            if(currentQuestionNo > 0){
+                examineAnsweredQuestion();
+			}
+        
+            currentQuestionNo ++;
+            
+            if(currentQuestionNo <= totalQuestion)
+            {
+                // goto next question   
+                var currentQuestionIndex = selectedQuestionIndexes[currentQuestionNo - 1];
+                loadQuestion(currentQuestionIndex);
+            }
+            else
+            {
+                // show result
+                showResult();
+            }
+        }
+        
+        function examineAnsweredQuestion()
+        {
+            var givenAnswer =  getAnswer().toUpperCase();
+            answeredCorrectly[currentQuestionNo - 1] = givenAnswer == currentCorrectAnswer;
+			if(answeredCorrectly[currentQuestionNo - 1])
+				score++;
+			showAnsweredResult(answeredCorrectly[currentQuestionNo - 1]);
+        }
+		
+		function showAnsweredResult(isCorrect)
+		{
+			var q = questions[selectedQuestionIndexes[currentQuestionNo - 1]];
+			var col = isCorrect ? 'green' : 'red';
+			var answers = "<label style='color:" + col +"'> <b>" + q[0] + ":  </b>";
+			for(var j=1; j<q.length; j++){
+				answers = answers + q[j];
+				if(j<q.length-1)
+					answers = answers + "; ";
+			}
+			
+			answers = answers + "</label><br />"
+			
+			
+			prevAnswerElement.innerHTML = answers;
+		}
+        
+        function getAnswer()
+        {
+			return answerElement.value;
+        }
+        
+        function showResult()
+        {
+            questionContainerElement.style.display = "none";
+            resultContainerElement.style.display = "block";
+            
+			resultTextElement.innerHTML = "<h2>Your score: " + score + "</h2>";
+			
+        }
+        
+        // returns a random integer within 0 and max including
+        function getRandomInteger(max)
+        {
+            return  Math.floor((max+1) * Math.random()) % (max+1);
+        }
+        
+        function getRandomQuestionIndexes(n, max)
+        {
+            var indexArray = new Array();
+            var count = 0;
+            while(count < n)
+            {
+                var index = getRandomInteger(max);
+                
+                // add in array only if this indexArray does not contain this index
+                if(contains(indexArray, index) == false)
+                {
+                    indexArray[indexArray.length] = index; 
+                    count++;   
+                }
+            }
+            
+            return indexArray;
+        }
+        
+        function contains(indexArray, index)
+        {
+//            for(var i=0; i<indexArray.length; i++)
+//            {
+//                if(indexArray[i] == index)
+//                    return true;
+//            }
+//            
+//            return false;
+
+            return indexOf(indexArray, index) >= 0;
+        }
+        
+        function indexOf(indexArray, index)
+        {
+            for(var i=0; i<indexArray.length; i++)
+            {
+                if(indexArray[i] == index)
+                    return i;
+            }
+            
+            return -1;
+        }
+        
+        function selectRandomQuestions()
+        {
+            selectedQuestionIndexes = getRandomQuestionIndexes(totalQuestion, questions.length-1);
+        }
+		
+		function restart()
+		{
+			init()
+		}
+		
+		String.prototype.replaceAt=function(index, character) 
+		{
+			return this.substr(0, index) + character + this.substr(index+character.length);
+		}
+        
+    </script>
+</head>
+
+<body onload="init();" style="font-size:16pt">
+    <div id="topBlank"></div>
+	<div id="QuestionContainer" >
+        <label id="Question">Question</label> <br />
+		<h2 id="Hint"></h2> 
+    	<input type="text" id="Answer" value=""/><br />
+		<button onclick="next();">Next</button> <br />
+	</div>
+	
+	<div id="ResultContainer">
+		<div id="ResultText"> </div>
+		<button onclick="restart();">Restart</button>
+	</div>
+	<br />
+	<div id="PrevAnswer">
+	</div>
+	
+</body>
+
+</html>
