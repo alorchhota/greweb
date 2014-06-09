@@ -1,0 +1,456 @@
+<html>
+<head>
+    <title>GFill : GRE Fill In The Gaps</title>
+    <script type="text/javascript" language="javascript">
+        var totalQuestion = null;
+        var currentQuestionNo = null;
+		var hintPercentage = null;
+        var score = null;
+        var answeredCorrectly = null;
+		
+        var currentCorrectAnswer = null;
+		
+        
+        var questionContainerElement = null;
+        var resultContainerElement = null;
+		
+        var questionElement = null;
+		var hintElement = null;
+        var answerElement = null;
+		var prevAnswerElement = null;
+		var resultTextElement = null;
+				
+        
+		var selectedQuestionIndexes = null;
+		
+        var questions = [
+            ["ANOMALY", "deviation from normal"],
+			["EQUIVOCAL", "undecided", "trying to deceive"],
+			["LUCID", "clear and easily understood"],
+			["PRECIPITATE", "to throw violently", "to bring about abruptly", "lacking deliberation"],
+			["ASSUAGE", "to make something unpleasant less severe "],
+			["ERUDITE", "learned", "scholarly", "bookish"],
+			["OPAQUE", "impossible to see through", "preventing the passage of light"],
+			["PRODIGAL", "lavish", "wasteful"],
+			["ENIGMA", "puzzle", "mystery"],
+			["FERVID", "intensely emotional", "feverish"],
+			["PLACATE", "to soothe or pacify"],
+			["ZEAL", "passion", "excitement"],
+			["ABSTAIN", "to choose not to do something"],
+			["AUDACIOUS", "fearless and daring"],
+			["DESICCATE", "to dry out thoroughly"],
+			["GULLIBLE", "easily deceived"],
+			["LAUDABLE", "worth of praise"],
+			["PEDANT", "someone who shows of learning"],
+			["VACILLATE", "to sway physically", "to be indecisive"],
+			["ADULTERATE", "to make impure"],
+			["CAPRICIOUS", "changing one's mind quickly and often"],
+			["ENGENDER", "to produce", "cause or bring about"],
+			["HOMOGENOUS", "of a similar kind"],
+			["LOQUACIOUS", "talkative"],
+			["PRAGMATIC", "practical as opposed to idealistic"],
+			["VOLATILE", "easily aroused or changeable", "lively or explosive"],
+			["APATHY", "lack of interest or emotion"],
+			["CORROBORATE", "to provide supporting evidence"],
+			["EPHEMERAL", "lasting a short time"],
+			["LACONIC", "using few words"],
+			["MITIGATE", "to soften", "to lessen"],
+			["PROPRIETY", "correct behavior", "obedience to rules and customs"],
+			["ADVOCATE", "to speak in favor of"],
+			["CACOPHONY", "harsh", "noise"],
+			["ENERVATE", "to reduce in strength"],
+			["INGENUOUS", "showing innocence or childlike simplicity"],
+			["MISANTHROPE", "a person who dislikes others"],
+			["PARADOX", "a contradiction or dilemma"],
+			["VENERATE", "to respect deeply"],
+			["ANTIPATHY", "extreme dislike"],
+			["DERIDE", "to speak or treat with contempt", "to mock"],
+			["EULOGY", "speech in praise of someone"],
+			["LETHARGIC", "acting in an indifferent or slow or sluggish manner"],
+			["OBDURATE", "hardened in feeling", "resistant to persuasion"],
+			["PHILANTHROPIC", "charity", "a desire or effort to promote goodness"],
+			["WAVER", "to fluctuate between choices"],
+			["BOLSTER", "to support", "to prop up"],
+			["DISSONANCE", "a harsh or disagreeable combination, often of sound"],
+			["GARRULOUS", "tending to talk a lot"],
+			["MALLEABLE", "capable of being shaped"],
+			["OSTENTATION", "excessive showiness"],
+			["PREVARICATE", "to lie", "deviate from truth"],
+			["ABATE", "to reduce in amount", "degree or severity"],
+			["ABSCOND", "to leave secretly"],
+			["ABYSS", "an extremely deep hole"],
+			["AESTHETIC", "concerning the appreciation of beauty"],
+			["AGGRANDIZE", "to increase in power", "influence and reputation"],
+			["ALLEVIATE", "to make more bearable"],
+			["AMALGAMATE", "to combine", "mix together"],
+			["Ambiguous", "doubtful", "uncertain"],
+			["Ameliorate", "to make better", "to improve"],
+			["Anachronism", "something out of place in time"],
+			["Analogous", "similar or alike in some way", "equivalent to"],
+			["Antagonize", "to annoy ro provoke to anger"],
+			["Arbitrate", "to judge a dispute between to opposite parties"],
+			["Archaic", "old-fashioned", "ancient"],
+			["Ardor", "intense and passionate feeling"],
+			["Articulate", "able to speak clearly and expressively"],
+			["Attenuate", "to reduce in force or degree", "to weaken"],
+			["Austere", "severe or stern in appearance", "undecorated"],
+			["Banal", "predictable", "cliched", "boring"],
+			["Bombastic", "pompous in speech and manner"],
+			["Candid", "impartial", "honest in speech"],
+			["Castigate", "to punish or criticize harshly"],
+			["Catalyst", "something that brings about a change in something else"],
+			["Caustic", "biting in wit"],
+			["Chaos", "great disorder or confusion"],
+			["Chauvinist", "someone prejudiced in favor of a group to which he or she belongs"],
+			["Chicanery", "deception by means of craft or guile"],
+			["Cogent", "convincing and well reasoned"],
+			["Condone", "to overlook", "pardon or disregard"],
+			["Convoluted", "intricate and complicated"],
+			["Credulous", "too trusting", "gullible"],
+			["Crescendo", "steadily increasing volume or force"],
+			["Decorum", "appropriateness of behavior or conduct", "propriety"],
+			["Deference", "respect", "courtesy"],
+			["Derisive", "in a mocking manner"],
+			["Desultory", "jumping from one thing to another", "disconnected"],
+			["Diatribe", "an abusive, condemnatory speech"],
+			["Diffident", "lacking self-confidence"],
+			["Dilate", "to make larger", "to expand"],
+			["Dilatory", "intended to delay"],
+			["Dilettante", "someone with an amateurish and superficial interest in a topic"],
+			["Dirge", "a funeral hymn", "a mournful speech"],
+			["Disabuse", "to set right", "to free from error"],
+			["Discern", "to perceive", "to recognize"],
+			["Disparate", "fundamentally different", "entirely unlike"],
+			["Dissemble", "to present a false appearance", "to disguise one's real intentions or character"],
+			["Dogma", "a firmly held opinion, often a religious belief"],
+			["Dogmatic", "dictatorial in one's opinions"],
+			["Dupe", "to deceive", "a person who is easily deceived"],
+			["Eclectic", "selecting from or made up from a variety of sources"],
+			["Efficacy", "effectiveness"],
+			["Elegy", "a sorrowful poem or speech"],
+			["Eloquent", "persuasive and moving, especially in speech"],
+			["Emulate", "to copy, to try to equal or excel"],
+			["Enumerate", "to count, list, or itemize"],
+			["Equivocate", "to use expressions of double meaning in order to mislead"],
+			["Erratic", "wandering and unpredictable"],
+			["Esoteric", "known or understood by only a few"],
+			["Estimable", "admirable"],
+			["Euphemism", "use of an inoffensive word or phrase in place of a more distasteful one"],
+			["Exacerbate", "to make worse"],
+			["Exculpate", "to clear from blame", "prove innocent"],
+			["Exigent", "urgent", "requiring immediate action"],
+			["Exonerate", "to clear from blame"],
+			["Explicit", "clearly stated or shown", "forthright in expression"],
+			["Fanatical", "acting excessively enthusiastic", "filled with extreme, unquestioned devotion"],
+			["Fawn", "to grovel"],
+			["Florid", "excessively decorated or embellished"],
+			["Foment", "to arouse or incite"],
+			["Frugality", "a tendency to be thrifty or cheap"],
+			["Gregarious", "outgoing, sociable"],
+			["Guile", "deceit or trickery"],
+			["Iconoclast", " one who opposes established beliefs, customs, and institutions"],
+			["Imperturbable", " not capable of being disturbed"],
+			["Impervious", " impossible to penetrate", " incapable of being affected"],
+			["Impetuous", " to act without thinking"],
+			["Implacable", " unable to be calmed down or made peaceful"],
+			["Inchoate", " not fully formed", " disorganized"],
+			["Inimical", " hostile", " unfriendly"],
+			["Innocuous", " harmless"],
+			["Insipid", " lacking interest or flavor"],
+			["Intransigent", " uncompromising", " refusing to be reconciled"],
+			["Inundate", " to overwhelm", " to cover with water"],
+			["Irascible", " easily made angry"],
+			["Lament", " to express sorrow", " to grieve"],
+			["Laud", " to give praise", " to glorify"],
+			["Lavish", " to give unsparingly", " extremely generous or extravagant"],
+			["Luminous", " bright, brilliant, glowing"],
+			["Malinger", " to evade responsibility by pretending to be ill"],
+			["Metaphor", " a figure of speech comparing two different things", " a symbol"],
+			["Meticulous", " extremely careful about details"],
+			["Mollify", " to calm or make less severe"],
+			["Monotony", " lack of variation"],
+			["Naive", " lacking sophistication or experience"],
+			["Obsequious", " overly submissive and eager to please"],
+			["Obstinate", " stubbron", " unyielding"],
+			["Obviate", " to prevent", " to make unnecessary"],
+			["Occlude", " to stop up", " to prevent the passage of"],
+			["Onerous", " troublesome and oppressive", " burdensome"],
+			["Opprobrium", " public disgrace"],
+			["Paragon", " model of excellence or perfection"],
+			["Perfidious", " willing to betray one's trust"],
+			["perfunctory", " done in a routine way", " indifferent"],
+			["Permeate", " to penetrate"],
+			["Placid", " tolerant", " calm"],
+			["Plastic", " able to be molded, altered, or bent"],
+			["Plethora", " excess"],
+			["Precipitous", " very steep"],
+			["Precipice", " a steep cliff"],
+			["Precipitation", " weather phenomena, like rain or snow, that fall from the sky"],
+			["Pristine", " fresh and clean", " uncorrupted"],
+			["Proliferate", " to increase in number quickly"],
+			["Propitiate", " to conciliate", " to appease"],
+			["Prudence", " wisdom, caution, or restraint"],
+			["Prude", " someone who is excessively concerned with propriety"],
+			["Pungent", " sharp and irritating to the senses"],
+			["Quiescent", " motionless"],
+			["Rarefy", " to make thinner or sparser"],
+			["Repudiate", " to reject the validity of"],
+			["Reticent", " silent", " reserved"],
+			["Rhetoric", " effective writing or speaking"],
+			["Satiate", " to satisfy fully or overindulge"],
+			["Soporific", " causing sleep or lethargy"],
+			["Specious", " deceptively attractive", " seemingly plausible but fallacious"],
+			["Stigma", " a mark of same or discredit"],
+			["Stolid", " unemotional", " lacking sensitivity"],
+			["Sublime", " lofty or grand"],
+			["Tacit", " done without using words"],
+			["Taciturn", " silent", " not talkative"],
+			["Tirade", " long, harsh speech or verbal attack"],
+			["Torpor", " extreme mental or physical sluggishness"],
+			["Transitory", " temporary, lasting a brief time"],
+			["Veracity", " filled with truth and accuracy"],
+			["Vex", " to annoy"],
+			["Whimsical", " acting in a fanciful or capricious manner", " unpredictable"]
+
+        ];
+        
+        function init()
+        {
+			initializeAll();
+            getHtmlElements();
+            selectRandomQuestions();
+            startExam();
+        }
+		
+		function initializeAll(){
+			totalQuestion = 10;
+			currentQuestionNo = 1;
+			hintPercentage = 50;
+			score = 0;
+			answeredCorrectly = new Array();
+			
+			currentCorrectAnswer = null;
+			
+			questionContainerElement = null;
+			resultContainerElement = null;
+			
+			questionElement = null;
+			answerElement = null;
+			prevAnswerElement = null;
+			
+			selectedQuestionIndexes = null;
+		}
+        
+        function getHtmlElements()
+        {
+            questionContainerElement = document.getElementById("QuestionContainer");
+            resultContainerElement = document.getElementById("ResultContainer");
+            
+			questionContainerElement.style.display = "block";
+            resultContainerElement.style.display = "none";
+        
+            questionElement = document.getElementById("Question");
+			hintElement = document.getElementById("Hint");
+			answerElement = document.getElementById("Answer");
+			prevAnswerElement = document.getElementById("PrevAnswer");
+			prevAnswerElement.innerHTML = "";
+            
+            resultTextElement = document.getElementById("ResultText");
+        }
+        
+        function startExam()
+        {
+            currentQuestionNo = 0;
+            next();
+        }
+        
+        function loadQuestion(quesIndex)
+        {
+            // show the question
+			var q = questions[quesIndex]
+			var optionQuestionIndex = getRandomQuestionIndexes(1, q.length-2)[0] + 1; // exclude the first word
+			questionElement.innerHTML = questions[quesIndex][optionQuestionIndex];
+			
+			// set current answer
+            currentCorrectAnswer = q[0].toUpperCase();
+			answerElement.value = ""
+			
+			// set hint
+			var noOfHint = Math.round(currentCorrectAnswer.length * hintPercentage / 100);
+			var hintIndexes = getRandomQuestionIndexes(noOfHint, currentCorrectAnswer.length-1);
+			
+			var hint = ""
+			for(var i=0; i<currentCorrectAnswer.length; i++)
+			{
+				hint = hint + "_";
+			}
+			
+			for(var i=0; i<hintIndexes.length; i++)
+			{
+				hint = hint.replaceAt( hintIndexes[i], currentCorrectAnswer[hintIndexes[i]]);
+			}
+			
+			hint = hint.replace(/_/g, ' _');
+			
+			
+			
+			hintElement.innerHTML = hint;
+			
+				
+			
+        }
+        
+        function selectMeaningFromQuestion(questionIndex)
+        {
+            var question = questions[questionIndex];
+            var meaningIndex = getRandomInteger(question.length - 2) + 1; // -1 for 0 based index, -1 for avoiding first GRE word
+            return question[meaningIndex];
+        }
+        
+        function next()
+        {
+            if(currentQuestionNo > 0){
+                examineAnsweredQuestion();
+			}
+        
+            currentQuestionNo ++;
+            
+            if(currentQuestionNo <= totalQuestion)
+            {
+                // goto next question   
+                var currentQuestionIndex = selectedQuestionIndexes[currentQuestionNo - 1];
+                loadQuestion(currentQuestionIndex);
+            }
+            else
+            {
+                // show result
+                showResult();
+            }
+        }
+        
+        function examineAnsweredQuestion()
+        {
+            var givenAnswer =  getAnswer().toUpperCase();
+            answeredCorrectly[currentQuestionNo - 1] = givenAnswer == currentCorrectAnswer;
+			if(answeredCorrectly[currentQuestionNo - 1])
+				score++;
+			showAnsweredResult(answeredCorrectly[currentQuestionNo - 1]);
+        }
+		
+		function showAnsweredResult(isCorrect)
+		{
+			var q = questions[selectedQuestionIndexes[currentQuestionNo - 1]];
+			var col = isCorrect ? 'green' : 'red';
+			var answers = "<label style='color:" + col +"'> <b>" + q[0] + ":  </b>";
+			for(var j=1; j<q.length; j++){
+				answers = answers + q[j];
+				if(j<q.length-1)
+					answers = answers + "; ";
+			}
+			
+			answers = answers + "</label><br />"
+			
+			
+			prevAnswerElement.innerHTML = answers;
+		}
+        
+        function getAnswer()
+        {
+			return answerElement.value;
+        }
+        
+        function showResult()
+        {
+            questionContainerElement.style.display = "none";
+            resultContainerElement.style.display = "block";
+            
+			resultTextElement.innerHTML = "<h2>Your score: " + score + "</h2>";
+			
+        }
+        
+        // returns a random integer within 0 and max including
+        function getRandomInteger(max)
+        {
+            return  Math.floor((max+1) * Math.random()) % (max+1);
+        }
+        
+        function getRandomQuestionIndexes(n, max)
+        {
+            var indexArray = new Array();
+            var count = 0;
+            while(count < n)
+            {
+                var index = getRandomInteger(max);
+                
+                // add in array only if this indexArray does not contain this index
+                if(contains(indexArray, index) == false)
+                {
+                    indexArray[indexArray.length] = index; 
+                    count++;   
+                }
+            }
+            
+            return indexArray;
+        }
+        
+        function contains(indexArray, index)
+        {
+//            for(var i=0; i<indexArray.length; i++)
+//            {
+//                if(indexArray[i] == index)
+//                    return true;
+//            }
+//            
+//            return false;
+
+            return indexOf(indexArray, index) >= 0;
+        }
+        
+        function indexOf(indexArray, index)
+        {
+            for(var i=0; i<indexArray.length; i++)
+            {
+                if(indexArray[i] == index)
+                    return i;
+            }
+            
+            return -1;
+        }
+        
+        function selectRandomQuestions()
+        {
+            selectedQuestionIndexes = getRandomQuestionIndexes(totalQuestion, questions.length-1);
+        }
+		
+		function restart()
+		{
+			init()
+		}
+		
+		String.prototype.replaceAt=function(index, character) 
+		{
+			return this.substr(0, index) + character + this.substr(index+character.length);
+		}
+        
+    </script>
+</head>
+
+<body onload="init();" style="font-size:16pt">
+    <div id="QuestionContainer" >
+        <label id="Question">Question</label> <br />
+		<h2 id="Hint"></h2> 
+    	<input type="text" id="Answer" value=""/><br />
+		<button onclick="next();">Next</button> <br />
+	</div>
+	
+	<div id="ResultContainer">
+		<div id="ResultText"> </div>
+		<button onclick="restart();">Restart</button>
+	</div>
+	<br />
+	<div id="PrevAnswer">
+	</div>
+	
+</body>
+
+</html>
