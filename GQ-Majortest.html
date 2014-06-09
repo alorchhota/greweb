@@ -1,0 +1,423 @@
+<html>
+<head>
+    <title>GQ - GRE MCQ</title>
+    <script type="text/javascript" language="javascript">
+        var totalQuestion = null;
+        var currentQuestionNo = null;
+        var score = null;
+        var answeredCorrectly = null;
+		
+        var currentCorrectAnswerIndex = null;
+		
+        
+        var questionContainerElement = null;
+        var resultContainerElement = null;
+		
+        var questionElement = null;
+        var option1Element = null;
+        var option2Element = null;
+        var option3Element = null;
+        var option4Element = null;
+        var radio1Element = null;
+        var radio2Element = null;
+        var radio3Element = null;
+        var radio4Element = null;
+		var resultTextElement = null;
+		
+        
+		var selectedQuestionIndexes = null;
+		
+        var questions = [
+			["canonical", "established", "authorized", "recognized"],
+			["judicious", "characterized by good judgement", "prudent"],
+			["canon", "rule of law and principles", "a standard"],
+			["clairvoyant", "a person who claims to see the future"],
+			["venial", "able to be forgiven", "excusable"],
+			["certitude", "certainty", "freedom from doubt"],
+			["evoke", "to call up", "cause to appear"],
+			["inexorable", "unyielding", "unalterable"],
+			["overt", "open to view or knowledge"],
+			["avert", "to turn away aside"],
+			["juxtapose", "to place close together"],
+			["mellow", "soft and rich"],
+			["repudiate", "reject"],
+			["smug", "confident of one's ability"],
+			["bask", "to lie in", "to enjoy"],
+			["vignette", "decorated design on the title page", "small sketch"],
+			["pastiche", "work compiled from various sources"],
+			["cameo", "small portrait"],
+			["reconnaissance", "inspection", "exploration"],
+			["preordained", "fated"],
+			["opulent", "rich"],
+			["libertine", "free-thinker"],
+			["accolade", "any award or honor"],
+			["moribund", "dying", "near death"],
+			["debunk", "throw out a wrong idea"],
+			["trudge", "walk as though tired"],
+			["mander", "wander"],
+			["amble", "walk aimlessly"],
+			["rage", "violent anger", "angry"],
+			["fettered", "restricted"],
+			["teeming", "abounding with something", "prolific or fertile"],
+			["tout", "advertise"],
+			["herald", "announce"],
+			["languish", "weaken", "fade"],
+			["abiding", "lasting"],
+			["pervasive", "spreaded throughout"],
+			["arcane", "known only to a few", "esoteric"],
+			["fickle", "changable"],
+			["stalwart", "brave and loyal"],
+			["docile", "easily managed"],
+			["servile", "overly submissive"],
+			["rococo", "highly elaborate"],
+			["barb", "insult"],
+			["lampoon", "mock", "deride"],
+			["lenient", "tolerant"],
+			["commute", "to change to a less severe one"],
+			["germane", "relevant"],
+			["pertinent", "relevant"],
+			["misogynistic", "hatred for women"],
+			["puritanical", "very strict in moral"],
+			["covert", "covered", "secret", "disguised"],
+			["prudish", "excessively proper"],
+			["confrontation", "open conflict"],
+			["mordant", "caustic"],
+			["preoccupation", "concern", "care", "worry", "solicitude"],
+			["petty", "of little importance", "trivial"],
+			["untoward", "unexpected", "inappropriate"],
+			["inured", "habituated", "accustomed"],
+			["hardened", "to become hard", "to become habituated"],
+			["melancholy", "sad"],
+			["lugubrious", "mournful"],
+			["jaunty", "having a lively, cheerful, self-confident manner"],
+			["jocose", "humorous"],
+			["frivolous", "not serious"],
+			["impasse", "deadlock"],
+			["coalesce", "combine"],
+			["tardy", "slow", "late", "sluggish"],
+			["hidebound", "narrow-minded"],
+			["inane", "stupid", "senseless"],
+			["pertinacity", "persistent determination"],
+			["adroit", "skilful"],
+			["dexterous", "skilful"],
+			["deft", "skilful"],
+			["secretarian", "denoting a sect"],
+			["frantic", "wild or distraught with fear, anxiety and other emotions"],
+			["distraught", "deeply upset"],
+			["dogged", "determined", "unyielding"],
+			["censure", "strong criticism"],
+			["upbraid", "scold"],
+			["chide", "scold"],
+			["eschew", "abstain from"],
+			["shun", "abstain from"],
+			["epitomize", "be a perfect example", "give a summary"],
+			["accentuate", "make more noticeable"],
+			["egregious", "outstandingly obvious"],
+			["pretentious", "attempting to pretend", "showy", "pompous"],
+			["subliminal", "below the threshold of consciousness"],
+			["hypochondriac", "person with imagining illness"],
+			["malcontent", "dissatisfied person"],
+			["quack", "a fraud physician"],
+			["charlatan", "a fraud"],
+			["denigrate", "criticize unfairly", "disparage"],
+			["decry", "public denounce", "criticism"],
+			["temerity", "audacious"],
+			["predilection", "a preference for something"],
+			["amity", "friendly relationship"],
+			["glib", "fluent", "smooth talking"],
+			["callous", "deliberately unfeeling"],
+			["saturnine", "slow and gloomy"],
+			["commendation", "praise"],
+			["jubilation", "a feeling of happiness"],
+			["incredulity", "state of being unbelieved"],
+			["incessant", "continuous", "uninterrupted"],
+			["xenophobia", "fear of foreigners"],
+			["punctilious", "meticulous", "worrying about details"],
+			["pander", "satisfy", "comply with"],
+			["gratify", "give pleasure or satisfaction"],
+			["indulge", "satisfy", "yield to desire"],
+			["sycophantic", "over-submissive"],
+			["lackluster", "lacking inspiration"],
+			["nepotism", "favoring relatives"],
+			["slander", "making false statement to dishonor other"],
+			["prodigy", "genius"],
+			["pariah", "an outcast"],
+			["tyro", "novice", "beginner"],
+			["vindicate", "clear from blame"],
+			["procastinate", "postpone", "delay"],
+			["reprieve", "cancer or postpone punishment"],
+			["cognizance", "awareness"],
+			["refulgent", "shining brightly"],
+			["sequestration", "the action of taking forcible posession of something"],
+			["debilitate", "weaken"],
+			["deracinate", "tear up by the roots"],
+			["stenorian", "loud and powerful in voice"],
+			["beligerence", "aggressive"],
+			["resurgent", "increasing", "reviving", "renascent", "restoring"],
+			["rodent", "animal like rat or mouse"],
+			["denizen", "an inhibitant"],
+			["propitious", "favorable"],
+			["hedonistic", "pleasure seeking"],
+			["decimation", "destruction"]			
+        
+		];
+        
+        function init()
+        {
+			setTopBlankSpace();
+			initializeAll();
+            getHtmlElements();
+            selectRandomQuestions();
+            startExam();
+        }
+		
+		function setTopBlankSpace(){
+			var isiPad = navigator.userAgent.match(/iPad/i) != null;
+			if(isiPad){
+				var topBlankElement = document.getElementById("topBlank");
+				topBlankElement.innerHTML = "<h><br/></h>"
+			}
+		}
+		
+		function initializeAll(){
+			totalQuestion = 10;
+			currentQuestionNo = 1;
+			score = 0;
+			answeredCorrectly = new Array();
+			
+			currentCorrectAnswerIndex = 0;
+			
+			questionContainerElement = null;
+			resultContainerElement = null;
+			
+			questionElement = null;
+			option1Element = null;
+			option2Element = null;
+			option3Element = null;
+			option4Element = null;
+			radio1Element = null;
+			radio2Element = null;
+			radio3Element = null;
+			radio4Element = null;
+			
+			selectedQuestionIndexes = null;
+		}
+        
+        function getHtmlElements()
+        {
+            questionContainerElement = document.getElementById("QuestionContainer");
+            resultContainerElement = document.getElementById("ResultContainer");
+            
+			questionContainerElement.style.display = "block";
+            resultContainerElement.style.display = "none";
+        
+            questionElement = document.getElementById("Question");
+            
+            option1Element = document.getElementById("option1");
+            option2Element = document.getElementById("option2");
+            option3Element = document.getElementById("option3");
+            option4Element = document.getElementById("option4");
+            
+            radio1Element = document.getElementById("Radio1");
+            radio2Element = document.getElementById("Radio2");
+            radio3Element = document.getElementById("Radio3");
+            radio4Element = document.getElementById("Radio4");
+			
+			resultTextElement = document.getElementById("ResultText");
+        }
+        
+        function startExam()
+        {
+            currentQuestionNo = 0;
+            next();
+        }
+        
+        function loadQuestion(quesIndex)
+        {
+            questionElement.innerHTML = questions[quesIndex][0];
+            
+            // set current answer index
+            currentCorrectAnswerIndex = getRandomInteger(3);
+            var optionQuestionIndexes = getRandomQuestionIndexes(4, questions.length-1);
+            
+            if(contains(optionQuestionIndexes, quesIndex))
+            {
+                // swap
+                var swapIndex = indexOf(optionQuestionIndexes, quesIndex);
+                optionQuestionIndexes[swapIndex] = optionQuestionIndexes[currentCorrectAnswerIndex];
+                optionQuestionIndexes[currentCorrectAnswerIndex] = quesIndex;
+            }
+            else
+                optionQuestionIndexes[currentCorrectAnswerIndex] = quesIndex;
+            
+            // TODO: generate options randomly
+            option1Element.innerHTML = selectMeaningFromQuestion(optionQuestionIndexes[0]);
+            option2Element.innerHTML = selectMeaningFromQuestion(optionQuestionIndexes[1]);
+            option3Element.innerHTML = selectMeaningFromQuestion(optionQuestionIndexes[2]);
+            option4Element.innerHTML = selectMeaningFromQuestion(optionQuestionIndexes[3]);
+            
+            radio1Element.checked = "";
+            radio2Element.checked = "";
+            radio3Element.checked = "";
+            radio4Element.checked = "";
+        }
+        
+        function selectMeaningFromQuestion(questionIndex)
+        {
+            var question = questions[questionIndex];
+            var meaningIndex = getRandomInteger(question.length - 2) + 1; // -1 for 0 based index, -1 for avoiding first GRE word
+            return question[meaningIndex];
+        }
+        
+        function next()
+        {
+            if(currentQuestionNo > 0)
+                examineAnsweredQuestion();
+        
+            currentQuestionNo ++;
+            
+            if(currentQuestionNo <= totalQuestion)
+            {
+                // goto next question   
+                var currentQuestionIndex = selectedQuestionIndexes[currentQuestionNo - 1];
+                loadQuestion(currentQuestionIndex);
+            }
+            else
+            {
+                // show result
+                showResult();
+            }
+        }
+        
+        function examineAnsweredQuestion()
+        {
+            var givenAnswerIndex = getAnswerIndex();
+            answeredCorrectly[currentQuestionNo - 1] = givenAnswerIndex == currentCorrectAnswerIndex;
+			if(givenAnswerIndex == currentCorrectAnswerIndex)
+				score++;
+			
+        }
+        
+        function getAnswerIndex()
+        {
+            if(radio1Element.checked != "" && radio1Element.checked !=null)
+                return 0;
+            if(radio2Element.checked != "" && radio2Element.checked !=null)
+                return 1;
+            if(radio3Element.checked != "" && radio3Element.checked !=null)
+                return 2;
+            if(radio4Element.checked != "" && radio4Element.checked !=null)
+                return 3;
+            return -1;
+        }
+        
+        function showResult()
+        {
+            questionContainerElement.style.display = "none";
+            resultContainerElement.style.display = "block";
+            
+			var answers = ""
+			for(var i=0; i<totalQuestion; i++)
+			{
+				var qIndex = selectedQuestionIndexes[i];
+				var q = questions[qIndex];
+				var col = answeredCorrectly[i] ? 'black' : 'red';
+				
+				
+				answers = answers + "<label style='color:" + col +"'> <b>" + q[0] + ":  </b>";
+				for(var j=1; j<q.length; j++){
+					answers = answers + q[j];
+					if(j<q.length-1)
+						answers = answers + "; ";
+				}
+				
+				answers = answers + "</label><br />"
+			}
+			
+			resultTextElement.innerHTML = "<h2>Your score: " + score + "</h2>" + answers;
+			
+        }
+        
+        // returns a random integer within 0 and max including
+        function getRandomInteger(max)
+        {
+            return  Math.floor((max+1) * Math.random()) % (max+1);
+        }
+        
+        function getRandomQuestionIndexes(n, max)
+        {
+            var indexArray = new Array();
+            var count = 0;
+            while(count < n)
+            {
+                var index = getRandomInteger(max);
+                
+                // add in array only if this indexArray does not contain this index
+                if(contains(indexArray, index) == false)
+                {
+                    indexArray[indexArray.length] = index; 
+                    count++;   
+                }
+            }
+            
+            return indexArray;
+        }
+        
+        function contains(indexArray, index)
+        {
+//            for(var i=0; i<indexArray.length; i++)
+//            {
+//                if(indexArray[i] == index)
+//                    return true;
+//            }
+//            
+//            return false;
+
+            return indexOf(indexArray, index) >= 0;
+        }
+        
+        function indexOf(indexArray, index)
+        {
+            for(var i=0; i<indexArray.length; i++)
+            {
+                if(indexArray[i] == index)
+                    return i;
+            }
+            
+            return -1;
+        }
+        
+        function selectRandomQuestions()
+        {
+            selectedQuestionIndexes = getRandomQuestionIndexes(totalQuestion, questions.length-1);
+        }
+		
+		function restart()
+		{
+			init()
+		}
+        
+    </script>
+</head>
+
+<body onload="init();" style="font-size:16pt">
+    <div id="topBlank"></div>
+	<div id="QuestionContainer" >
+        <h2 id="Question">Question</h2> 
+    	
+	    <input type="radio" name="opt" id="Radio1" value="1"/> <label id="option1"> Option 1 </label><br />
+	    <input type="radio" name="opt" id="Radio2" value="2"/> <label id="option2"> Option 2 </label><br />
+	    <input type="radio" name="opt" id="Radio3" value="3"/> <label id="option3"> Option 3 </label><br />
+	    <input type="radio" name="opt" id="Radio4" value="4"/> <label id="option4"> Option 4 </label><br />
+		
+	    <button onclick="next();">Next</button>
+	</div>
+	
+	<div id="ResultContainer">
+		<div id="ResultText"> </div>
+		<button onclick="restart();">Restart</button>
+	</div>
+	
+</body>
+
+</html>
